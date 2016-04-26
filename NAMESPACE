@@ -1,0 +1,40 @@
+
+## ------------------------------------------------------------------------------------------------
+
+useDynLib(UBL)
+
+## ------------------------------------------------------------------------------------------------
+
+import(methods)
+importFrom("grDevices", "boxplot.stats")
+importFrom("stats", "rnorm", "runif", "sd")
+## ------------------------------------------------------------------------------------------------
+
+## Functions
+
+export(
+	##classification pre-processing methods
+	CNNClassif,
+	ENNClassif,
+	GaussNoiseClassif,
+	ImpSampClassif,
+	NCLClassif,
+	OSSClassif,
+	RandOverClassif,
+	RandUnderClassif,
+	SmoteClassif,
+	TomekClassif,
+	## regression pre-processing methods
+	GaussNoiseRegress,
+	ImpSampRegress,
+	RandOverRegress,
+	RandUnderRegress,
+	SmoteRegress,	
+	## phi related function
+	phi.control,
+#	phi.setup,
+#	phi.extremes,
+#	phi.range,
+	phi
+)
+       
