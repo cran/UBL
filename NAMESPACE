@@ -19,27 +19,38 @@ importFrom("gstat", "idw")
 
 ## ------------------------------------------------------------------------------------------------
 
+## Classes and methods
+
+exportClasses(BagModel)
+exportMethods(show)
+exportMethods(predict)
+
+
 ## Functions
 
 export(
+	## constructors
+	BagModel,
 	##classification pre-processing methods
 	AdasynClassif,
 	CNNClassif,
 	ENNClassif,
 	GaussNoiseClassif,
-	ImpSampClassif,
+	WERCSClassif,
 	NCLClassif,
 	OSSClassif,
 	RandOverClassif,
 	RandUnderClassif,
 	SmoteClassif,
 	TomekClassif,
+	SMOGNClassif,
 	## regression pre-processing methods
 	GaussNoiseRegress,
-	ImpSampRegress,
+	WERCSRegress,
 	RandOverRegress,
 	RandUnderRegress,
-	SmoteRegress,	
+	SmoteRegress,
+	SMOGNRegress,	
 	## phi related function
 	phi.control,
 #	phi.setup,
@@ -62,6 +73,11 @@ export(
 	#MetacostRegress,
 	## neighbours function
 	neighbours,
-	distances
+	distances,
+	## bagging methods for imbalanced regression
+	BaggingRegress,
+	ReBagg
 )
+
+
        
