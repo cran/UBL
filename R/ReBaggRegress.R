@@ -1,6 +1,10 @@
+##########################################################################
+## New Bagging Strategies for imbalanced regression : RE(sampled)BAGG(ing)
+## P. Branco Dez 2017
+##########################################################################
 
 
-ReBagg <- function(form, train, rel="auto", thr.rel, learner, learner.pars,
+ReBaggRegress <- function(form, train, rel="auto", thr.rel, learner, learner.pars,
                    nmodels , samp.method= "variationSMT", aggregation="Average",
                    quiet=TRUE){
   

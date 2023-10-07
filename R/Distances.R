@@ -25,10 +25,10 @@ distances <- function(tgt, dat, dist, p=2)
   # IVDM : p=-5
   # WVDM : p=-6
   # MVDM : p=-7
-  
+
   # just set a dummy value for the number of neighbours to evaluate, which is not
-  # used in this function but is necessary for the fortran function.  
-  
+  # used in this function but is necessary for the fortran function.
+
   k <- 1
 
   if(p<1) stop("The parameter p must be >=1!")
@@ -50,53 +50,53 @@ distances <- function(tgt, dat, dist, p=2)
              #             "MVDM"=-8,
              "p-norm"=p,
              stop("Distance measure not available!"))
-  
-  
-  if (class(dat[,tgt]) == "numeric" & p <= -4) stop("distance measure selected only available for classification tasks")
-  
-  nomatr <- c() 
+
+
+  if (is(class(dat[,tgt]), "numeric") & p <= -4) stop("distance measure selected only available for classification tasks")
+
+  nomatr <- c()
   for (col in seq.int(dim(dat)[2])) {
     if (class(dat[,col]) %in% c('factor','character')) {
       nomatr <- c(nomatr, col)
     }
   }
-  
+
   nomatr <- setdiff(nomatr, tgt)
   numatr <- setdiff(seq.int(dim(dat)[2]), c(nomatr,tgt))
-  
+
   nomData <- t(sapply(subset(dat, select = nomatr), as.integer))
   numData <- t(subset(dat, select = numatr))
-  
+
   # check if the measure can be applied to the data set features
-  
+
   if (length(numatr) & p == -2) {
     stop("Can not compute Overlap metric with numeric attributes!")
   }
   if (length(nomatr) & p >= -1) {
     stop("Can not compute ", dist ," distance with nominal attributes!")
   }
-  
+
   tgtData <- dat[, tgt]
   n <- length(tgtData)
   res <- matrix(0.0, nrow = k, ncol = n)
-  if (class(tgtData) != "numeric") {tgtData <- as.integer(tgtData)}
-  
+  if (!is(class(tgtData), "numeric")) {tgtData <- as.integer(tgtData)}
+
   Cl <- length(unique(tgtData))
   nnom <- length(nomatr)
   nnum <- length(numatr)
-  
+
   distm <- matrix(0.0, nrow = n, ncol = n)
   numD <- matrix(0.0, nrow = nnum, ncol = n)
-  
-  
+
+
   storage.mode(numData) <- "double"
   storage.mode(nomData) <- "integer"
   storage.mode(res) <- "integer"
   storage.mode(tgtData) <- "double"
   storage.mode(distm) <- "double"
   storage.mode(numD) <- "double"
-  
-  neig <- .Fortran("F_neighbours", 
+
+  neig <- .Fortran("F_neighbours",
                    tgtData = tgtData,  # tgt data
                    numData = numData, #numeric data
                    nomData = nomData, #nominal data
@@ -110,6 +110,6 @@ distances <- function(tgt, dat, dist, p=2)
                    numD = numD,
                    res = res) # output
   neig <- neig$distm
-  
+
   neig
 }

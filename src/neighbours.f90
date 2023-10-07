@@ -50,21 +50,24 @@ subroutine F_neighbours(tgtData, numData, nomData, p, k, n, nnum,&
 !----------------------------------------------------------------
 
 	implicit none
+	
+	integer, parameter :: dp = kind(1.0d0)
+
 	!Arguments
-	integer   (kind=4), intent(in) :: p, k, n, nnum, nnom, Cl
-	real      (kind=8), intent(in) :: tgtData(1,n)
-	real      (kind=8), intent(in) :: numData(nnum,n)
-	integer   (kind=4), intent(in) :: nomData(nnom,n)
-	integer(kind=4), intent(inout) :: res(k,n)
-	real   (kind=8), intent(inout) :: distm(n,n)
-	real   (kind=8), intent(inout) :: numD(nnum,n)
+	integer   , intent(in) :: p, k, n, nnum, nnom, Cl
+	real      (dp), intent(in) :: tgtData(1,n)
+	real      (dp), intent(in) :: numData(nnum,n)
+	integer   , intent(in) :: nomData(nnom,n)
+	integer, intent(inout) :: res(k,n)
+	real   (dp), intent(inout) :: distm(n,n)
+	real   (dp), intent(inout) :: numD(nnum,n)
 
 	!Local Variables
-	integer(kind=4) :: i,j,l,bestIndex
-	integer(kind=4) :: used(n)
-	real   (kind=8) :: bestDist
-	real   (kind=8) :: ranges(nnum,2)
-	real   (kind=8) :: mean(nnum), sd(nnum)
+	integer :: i,j,l,bestIndex
+	integer :: used(n)
+	real   (dp) :: bestDist
+	real   (dp) :: ranges(nnum,2)
+	real   (dp) :: mean(nnum), sd(nnum)
 
 	distm=0.0d0
 	numD=numData
@@ -119,12 +122,12 @@ subroutine F_neighbours(tgtData, numData, nomData, p, k, n, nnum,&
 subroutine callpNorm(p, distm, numD, nnum, n)
 	implicit none
 	!Arguments
-	integer (kind=4), intent(in) :: n, nnum, p
-	real    (kind=8), intent(in) :: numD(nnum,n)
-	real (kind=8), intent(inout) :: distm(n,n)
+	integer , intent(in) :: n, nnum, p
+	real    (dp), intent(in) :: numD(nnum,n)
+	real (dp), intent(inout) :: distm(n,n)
 
 	!Local Variables
-	integer(kind=4) :: i,j
+	integer :: i,j
 
 	do j=1,n-1
 		do i=j+1,n
@@ -137,12 +140,12 @@ end subroutine callpNorm
 subroutine callChebyshev(distm, numD, nnum, n)
 	implicit none
 	!Arguments
-	integer (kind=4), intent(in) :: n, nnum
-	real    (kind=8), intent(in) :: numD(nnum,n)
-	real (kind=8), intent(inout) :: distm(n,n)
+	integer , intent(in) :: n, nnum
+	real    (dp), intent(in) :: numD(nnum,n)
+	real (dp), intent(inout) :: distm(n,n)
 
 	!Local Variables
-	integer(kind=4) :: i, j
+	integer :: i, j
 	
 	do j=1,n-1
 		do i=j+1,n
@@ -155,15 +158,15 @@ end subroutine callChebyshev
 subroutine callHVDM(distm, numD, nomData, nnum, nnom, tgtData, n, Cl)
 	implicit none
 	!Arguments
-	integer(kind=4), intent(in) :: nnum, nnom, n, Cl
-	real(kind=8), intent(inout) :: distm(n,n)
-	real   (kind=8), intent(in) :: numD(nnum,n)
-	integer(kind=4), intent(in) :: nomData(nnom,n)
-	real   (kind=8), intent(in) :: tgtData(n)
+	integer, intent(in) :: nnum, nnom, n, Cl
+	real(dp), intent(inout) :: distm(n,n)
+	real   (dp), intent(in) :: numD(nnum,n)
+	integer, intent(in) :: nomData(nnom,n)
+	real   (dp), intent(in) :: tgtData(n)
 
 	!Local Variables
-	integer(kind=4) :: i,j
-	real    (kind=8):: sd(nnum), mean(nnum)
+	integer :: i,j
+	real    (dp):: sd(nnum), mean(nnum)
 	
 	sd = 0.0d0
 	mean = 0.0d0
@@ -188,9 +191,9 @@ end subroutine callHVDM
 subroutine callOverlap(distm, nomData, nnom, n)
 	implicit none
 	!Arguments
-	integer(kind=4), intent(in) :: n, nnom
-	integer(kind=4), intent(in) :: nomData(nnom,n)
-	real(kind=8), intent(inout) :: distm(n,n)
+	integer, intent(in) :: n, nnom
+	integer, intent(in) :: nomData(nnom,n)
+	real(dp), intent(inout) :: distm(n,n)
 
 	!Local Variables
 	integer :: i, j
@@ -206,12 +209,12 @@ end subroutine callOverlap
 subroutine callCanberra(distm, numD, nnum, n)
 	implicit none
 	!Arguments
-	integer(kind=4), intent(in) :: n, nnum
-	real   (kind=8), intent(in) :: numD(nnum,n)
-	real(kind=8), intent(inout) :: distm(n,n)
+	integer, intent(in) :: n, nnum
+	real   (dp), intent(in) :: numD(nnum,n)
+	real(dp), intent(inout) :: distm(n,n)
 
 	!Local Variables
-	integer(kind=4) :: i, j
+	integer :: i, j
 	do j=1,n-1
 		do i=j+1,n
 			distm(i,j) = distm(i,j) + canberra(numD(:,j), numD(:,i), nnum)
@@ -233,14 +236,14 @@ end subroutine callCanberra
 subroutine callHEOM(distm, numD, nnum, nomData, nnom, n)
 	implicit none
 	!Arguments
-	integer(kind=4), intent(in) :: n, nnum, nnom
-	real   (kind=8), intent(in) :: numD(nnum,n)
-	integer(kind=4), intent(in) :: nomData(nnom,n)
-	real(kind=8), intent(inout) :: distm(n,n)
+	integer, intent(in) :: n, nnum, nnom
+	real   (dp), intent(in) :: numD(nnum,n)
+	integer, intent(in) :: nomData(nnom,n)
+	real(dp), intent(inout) :: distm(n,n)
 
 	!Local Variables
-	integer(kind=4) :: i, j
-	real   (kind=8) :: ranges(nnum)
+	integer :: i, j
+	real   (dp) :: ranges(nnum)
 
 	do i=1,nnum
 		ranges(i) = maxval(numD(i,:)) - minval(numD(i,:))
@@ -260,8 +263,8 @@ end subroutine callHEOM
 !!functions definitions
 double precision function pNorm(p,a,b,d)
 	implicit none
-	integer(kind=4), intent(in) :: p, d
-	real   (kind=8), intent(in) :: a(d), b(d)
+	integer, intent(in) :: p, d
+	real   (dp), intent(in) :: a(d), b(d)
 
 	pNorm = (sum((abs(a-b))**p))**(1.0/dble(p))
 
@@ -269,11 +272,11 @@ end function pNorm
 
 double precision function HEOMnum(a,b,d,ranges)
 	implicit none
-	integer(kind=4), intent(in) :: d
-	real   (kind=8), intent(in) :: a(d), b(d), ranges(d)
-	integer(kind=4) :: i
+	integer, intent(in) :: d
+	real   (dp), intent(in) :: a(d), b(d), ranges(d)
+	integer :: i
 	! Epsilon value
-	real    (kind=8), PARAMETER :: eps = 1d-30
+	real    (dp), PARAMETER :: eps = 1d-30
 	
 	HEOMnum =0.0d0
 	do i=1, d
@@ -287,8 +290,8 @@ end function HEOMnum
 
 double precision function chebyshev(a,b,d)
 	implicit none
-	integer(kind=4), intent(in) :: d
-	real   (kind=8), intent(in) :: a(d), b(d)
+	integer, intent(in) :: d
+	real   (dp), intent(in) :: a(d), b(d)
 
 
 	chebyshev = maxval(abs(a-b))
@@ -297,9 +300,9 @@ end function chebyshev
 
 double precision function overlap(a,b,d)
 	implicit none
-	integer(kind=4), intent(in) :: d
-	integer(kind=4), intent(in) :: a(d), b(d)
-	integer            (kind=4) :: i,s
+	integer, intent(in) :: d
+	integer, intent(in) :: a(d), b(d)
+	integer             :: i,s
 	
 	s = 0
 	do i=1,d
@@ -314,8 +317,8 @@ end function overlap
 
 double precision function canberra(a,b,d)
 	implicit none
-	integer(kind=4), intent(in) :: d
-	real   (kind=8), intent(in) :: a(d), b(d)
+	integer, intent(in) :: d
+	real   (dp), intent(in) :: a(d), b(d)
 	
 	canberra = sum(abs(a-b)/(abs(a)+abs(b)))
 
@@ -324,13 +327,13 @@ end function canberra
 ! Heterogenous Value Difference Metric
 double precision function HVDM(numa, numb, sd, nom, dimnum, dimnom, tgtData, n, i, j, Cl)
 	implicit none
-	integer(kind=4), intent(in) :: dimnum, dimnom, n, i, j, Cl
-	real   (kind=8), intent(in) :: numa(dimnum), numb(dimnum)
-	integer(kind=4), intent(in) :: nom(dimnom, n)
-	real   (kind=8), intent(in) :: tgtData(n)
-	real   (kind=8), intent(in) :: sd(dimnum)
+	integer, intent(in) :: dimnum, dimnom, n, i, j, Cl
+	real   (dp), intent(in) :: numa(dimnum), numb(dimnum)
+	integer, intent(in) :: nom(dimnom, n)
+	real   (dp), intent(in) :: tgtData(n)
+	real   (dp), intent(in) :: sd(dimnum)
 
-	real               (kind=8) :: resnum, resnom
+	real               (dp) :: resnum, resnom
 
 
 	if (dimnom == 0) then
@@ -350,13 +353,13 @@ end function HVDM
 
 double precision function HVDMnum(numa, numb, dimnum, sd)
 	implicit none
-	integer(kind=4), intent(in) :: dimnum
-	real   (kind=8), intent(in) :: numa(dimnum), numb(dimnum), sd(dimnum)
+	integer, intent(in) :: dimnum
+	real   (dp), intent(in) :: numa(dimnum), numb(dimnum), sd(dimnum)
 
 
-	integer            (kind=4) :: i
+	integer             :: i
 	! Epsilon value
-	real    (kind=8), PARAMETER :: eps = 1d-30
+	real    (dp), PARAMETER :: eps = 1d-30
 	
 	HVDMnum = 0.0d0
 	do i=1, dimnum
@@ -369,13 +372,13 @@ end function HVDMnum
 
 double precision function HVDMnom(nomdata, dimnom, tgtData, n, i, j, Cl)
 	implicit none
-	integer(kind=4), intent(in) :: dimnom, n, i, j, Cl
-	integer(kind=4), intent(in) :: nomdata(dimnom, n)
-	real   (kind=8), intent(in) :: tgtData(n)
+	integer, intent(in) :: dimnom, n, i, j, Cl
+	integer, intent(in) :: nomdata(dimnom, n)
+	real   (dp), intent(in) :: tgtData(n)
 
-	real               (kind=8) :: res
-	integer            (kind=4) :: att, k, l, p
-	real               (kind=8) :: ci, cj, NCli, NClj, resAt, finalresAt
+	real               (dp) :: res
+	integer             :: att, k, l, p
+	real               (dp) :: ci, cj, NCli, NClj, resAt, finalresAt
 	
 	finalresAt = 0
 	

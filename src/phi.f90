@@ -32,16 +32,19 @@ subroutine rtophi(n, y, method, npts, lparms, phiParms, yPhi, ydPhi, yddPhi)
 !              University of Porto).
 !----------------------------------------------------------------
 	implicit none
+	
+	integer, parameter :: dp = kind(1.0d0)
+	
 	! Arguments
-	integer (kind=4), intent(in) :: n, lparms, method, npts
-	real   (kind=8), intent (in) :: y(n)
-	real   (kind=8), intent (in) :: phiParms(lparms)
-	real(kind=8), intent (inout) :: yPhi(n), ydPhi(n), yddPhi(n)
+	integer , intent(in) :: n, lparms, method, npts
+	real (dp), intent (in) :: y(n)
+	real (dp), intent (in) :: phiParms(lparms)
+	real (dp), intent (inout) :: yPhi(n), ydPhi(n), yddPhi(n)
 	
 	!Local Variables
-	real   (kind=8) :: x(npts), a(npts), b(npts), c(npts), d(npts) !,&
+	real   (dp) :: x(npts), a(npts), b(npts), c(npts), d(npts) !,&
 !						y_phi, yd_phi, ydd_phi
-	integer(kind=4) :: i
+	integer :: i
 	
 	x=0.0d0
 	a=0.0d0
@@ -57,14 +60,14 @@ contains
 
 subroutine phiEval(n, y, method, npts, x, a, b, c, d, yPhi, ydPhi, yddPhi)
 	!Arguments
-	integer(kind=4), intent(in) :: n, method, npts
-	real   (kind=8), intent(in) :: y(n)
-	real(kind=8), intent(inout) :: yPhi(n), ydPhi(n), yddPhi(n)
-	real   (kind=8), intent(in) :: x(npts), a(npts), b(npts), c(npts), d(npts)
+	integer, intent(in) :: n, method, npts
+	real   (dp), intent(in) :: y(n)
+	real(dp), intent(inout) :: yPhi(n), ydPhi(n), yddPhi(n)
+	real   (dp), intent(in) :: x(npts), a(npts), b(npts), c(npts), d(npts)
 
 	!Local Variables 
-	integer(kind=4) :: i
-	real   (kind=8) :: yval, yvald, yvaldd
+	integer :: i
+	real   (dp) :: yval, yvald, yvaldd
 	do i=1, n
 		call phiSplValue(y(i), method, n, npts, x, a, b, c, d, yval, yvald, yvaldd)
 		yPhi(i) = yval
@@ -77,13 +80,13 @@ end subroutine phiEval
 
 subroutine phiSplInit(lparms, phiParms, npts, x, a, b, c, d)
 	!Arguments
-	integer (kind=4), intent(in) :: lparms, npts
-	real    (kind=8), intent(in) :: phiParms(lparms)
-	real (kind=8), intent(inout) :: x(npts), a(npts), b(npts), c(npts), d(npts)
+	integer , intent(in) :: lparms, npts
+	real    (dp), intent(in) :: phiParms(lparms)
+	real (dp), intent(inout) :: x(npts), a(npts), b(npts), c(npts), d(npts)
 	
 	!Local Variables
-	integer (kind=4) :: i, n
-	real    (kind=8) :: newm(npts), y(npts), m(npts)
+	integer  :: i, n
+	real    (dp) :: newm(npts), y(npts), m(npts)
 	
 	do i=1, npts
 		x(i) = phiParms(3 * i - 2)
@@ -102,12 +105,12 @@ end subroutine phiSplInit
 
 subroutine phiSplValue( y, method, n, npts, x, a, b, c, d, yval, yvald, yvaldd)
 	!Arguments
-	integer(kind=4), intent(in) :: method, n, npts
-	real   (kind=8), intent(in) :: y, x(npts), a(npts), b(npts), c(npts), d(npts) 
-	real(kind=8), intent(inout) :: yval, yvald, yvaldd
+	integer, intent(in) :: method, n, npts
+	real   (dp), intent(in) :: y, x(npts), a(npts), b(npts), c(npts), d(npts) 
+	real(dp), intent(inout) :: yval, yvald, yvaldd
 
 	!Local Variables
-	integer(kind=4) :: extrapol ! //linear
+	integer :: extrapol ! //linear
 	
 	extrapol = 0
 	call pchipVal(npts, x, a, b, c, d, y, extrapol, yval, yvald, yvaldd)
@@ -156,13 +159,13 @@ subroutine pchipVal(npts, x, a, b, c, d, xval, extrapol, yval, yvald, yvaldd)
 !----------------------------------------------------------------
 	implicit none
 	!Arguments
-	integer (kind=4), intent(in) :: npts, extrapol
-	real    (kind=8), intent(in) :: x(npts), a(npts), b(npts), c(npts), d(npts), xval
-	real (kind=8), intent(inout) :: yval, yvald, yvaldd
+	integer , intent(in) :: npts, extrapol
+	real    (dp), intent(in) :: x(npts), a(npts), b(npts), c(npts), d(npts), xval
+	real (dp), intent(inout) :: yval, yvald, yvaldd
 	
 	!Local Variables
-	integer(kind=4) :: i, rightmostClosed, allInside, mfl, left
-	real   (kind=8) :: s
+	integer :: i, rightmostClosed, allInside, mfl, left
+	real   (dp) :: s
 
 	i = 1
 	left = 1
@@ -223,13 +226,13 @@ subroutine pchipSet(npts, x, y, m, newm, c, d)
 !----------------------------------------------------------------
 	implicit none
 	! Arguments
-	integer(kind=4), intent(in) :: npts
-	real(kind=8), intent(inout) :: x(npts), y(npts), newm(npts), c(npts), d(npts)
-	real   (kind=8), intent(in) :: m(npts)
+	integer, intent(in) :: npts
+	real(dp), intent(inout) :: x(npts), y(npts), newm(npts), c(npts), d(npts)
+	real   (dp), intent(in) :: m(npts)
 	
 	! Local Variables
-	integer(kind=4) :: i
-	real   (kind=8) :: h(npts), delta(npts)
+	integer :: i
+	real   (dp) :: h(npts), delta(npts)
 	
 	
 	do i=1, npts-1
@@ -275,13 +278,13 @@ subroutine pchipSlopeMonoFC(npts, newm, delta)
 !----------------------------------------------------------------
 	implicit none
 	! Arguments
-	integer(kind=4), intent(in) :: npts
-	real   (kind=8), intent(in) :: delta(npts)
-	real(kind=8), intent(inout) :: newm(npts)
+	integer, intent(in) :: npts
+	real   (dp), intent(in) :: delta(npts)
+	real(dp), intent(inout) :: newm(npts)
 	
 	! Local Variables
-	integer(kind=4) :: k, k1
-	real   (kind=8) :: Sk, alpha, beta, a2b3, ab23, tauS
+	integer :: k, k1
+	real   (dp) :: Sk, alpha, beta, a2b3, ab23, tauS
 
 	do k=1,npts-1 ! modify both newm(i) and newm(i+1) if needed
 		Sk = delta(k)
@@ -349,12 +352,12 @@ subroutine findInterval(xt, npts, x, rightmostClosed, allInside, ilo,&
 !----------------------------------------------------------------
 	implicit none
 	!Arguments
-	integer    (kind=4), intent(in) :: npts, rightmostClosed, allInside
-	integer (kind=4), intent(inout) :: mflag, left, ilo
-	real       (kind=8), intent(in) :: xt(npts), x
+	integer    , intent(in) :: npts, rightmostClosed, allInside
+	integer , intent(inout) :: mflag, left, ilo
+	real       (dp), intent(in) :: xt(npts), x
 
 	!Local Variables
-	integer(kind=4) :: istep, ihi
+	integer :: istep, ihi
 
 	if (ilo <= 0) then
 		if (x < xt(1)) then
@@ -434,8 +437,8 @@ end subroutine findInterval
 subroutine leftBoundary(mflag, allInside, left)
 	implicit none
 	!Arguments
-	integer(kind=4), intent(inout) :: mflag, left
-	integer   (kind=4), intent(in) :: allInside
+	integer, intent(inout) :: mflag, left
+	integer   , intent(in) :: allInside
 
 	mflag = -1
 	if (allInside == 1) then
@@ -450,9 +453,9 @@ end subroutine leftBoundary
 subroutine rightBoundary(xt, npts, x, mflag, allInside, rightmostClosed, left)
 	implicit none
 	!Arguments
-	integer   (kind=4), intent(in) :: npts, allInside, rightmostClosed
-	integer(kind=4), intent(inout) :: mflag, left
-	real      (kind=8), intent(in) :: xt(npts), x
+	integer   , intent(in) :: npts, allInside, rightmostClosed
+	integer, intent(inout) :: mflag, left
+	real      (dp), intent(in) :: xt(npts), x
 
 	mflag = +1
 	if (allInside == 1 .or. (rightmostClosed == 1 .and. x == xt(npts))) then
@@ -466,12 +469,12 @@ end subroutine rightBoundary
 subroutine gotoL50(xt, npts, x, ilo, ihi, mflag, left)
 	implicit none
 	!Arguments
-	integer   (kind=4), intent(in) :: npts
-	integer(kind=4), intent(inout) :: mflag, left, ilo, ihi
-	real      (kind=8), intent(in) :: xt(npts), x
+	integer   , intent(in) :: npts
+	integer, intent(inout) :: mflag, left, ilo, ihi
+	real      (dp), intent(in) :: xt(npts), x
 
 	!Local Variables
-	integer (kind=4) :: middle
+	integer  :: middle
 	
     !* **** now xt[ilo] <= x < xt[ihi] . narrow the interval. */
 	do

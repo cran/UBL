@@ -1,8 +1,8 @@
-\name{ReBagg}
-\alias{ReBagg}
+\name{ReBaggRegress}
+\alias{ReBaggRegress}
 
 \title{
-REBagg: RE(sampled) BAG(ging), an ensemble method for dealing with imbalanced regression problems.
+REBaggRegress: RE(sampled) BAG(ging), an ensemble method for dealing with imbalanced regression problems.
 }
 \description{
 This function handles imbalanced regression problems by learneing a special purpose bagging ensemble.
@@ -11,7 +11,7 @@ The resamples are built taking into consideration the imbalance of the problem.
 Currently, there are 4 different methods for building the resamples used.
 }
 \usage{
-ReBagg(form, train, rel="auto", thr.rel, learner, learner.pars,
+ReBaggRegress(form, train, rel="auto", thr.rel, learner, learner.pars,
        nmodels, samp.method = "variationSMT", aggregation="Average", quiet=TRUE)
 }
 \arguments{
@@ -50,17 +50,18 @@ ReBagg(form, train, rel="auto", thr.rel, learner, learner.pars,
   obtained by the individual learners. 
   For now, the only method available is by averaging the models predictions.
   }
-  \item{quiet}{logical specifying if development should be shown or not.Defaults to TRUE
+  \item{quiet}{logical specifying if development should be shown or not. Defaults to TRUE
   }
 }
 
 \value{
   The function returns an object of class BagModel. 
 }
-
+\references{
+Branco, P. and Torgo, L. and Ribeiro, R.P. (2018) \emph{REBAGG: REsampled BAGGing for Imbalanced Regression} LIDTA2018: 2nd International Workshop on Learning with Imbalanced Domains: Theory and Applications (Co-located with ECML/PKDD 2018) Dublin, Ireland
+}
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
-
 
 \keyword{ensemble bagging regression}
 

@@ -76,7 +76,7 @@ export(
 	distances,
 	## bagging methods for imbalanced regression
 	BaggingRegress,
-	ReBagg
+	ReBaggRegress
 )
 
 

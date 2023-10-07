@@ -25,9 +25,9 @@ neighbours <- function(tgt, dat, dist, p=2, k)
   # IVDM : p=-5
   # WVDM : p=-6
   # MVDM : p=-7
-  
-  
-  
+
+
+
   if(p<1) stop("The parameter p must be >=1!")
   # p >=-1 only numeric attributes handled
   # p =-2 only nominal attributes handled
@@ -47,25 +47,25 @@ neighbours <- function(tgt, dat, dist, p=2, k)
 #             "MVDM"=-8,
             "p-norm"=p,
             stop("Distance measure not available!"))
-   
-    
-  if (class(dat[,tgt]) == "numeric" & p <= -4) stop("distance measure selected only available for classification tasks")
 
-nomatr <- c() 
+
+  if (is(class(dat[,tgt]), "numeric") & p <= -4) stop("distance measure selected only available for classification tasks")
+
+nomatr <- c()
   for (col in seq.int(dim(dat)[2])) {
     if (class(dat[,col]) %in% c('factor','character')) {
       nomatr <- c(nomatr, col)
     }
   }
-  
+
   nomatr <- setdiff(nomatr, tgt)
   numatr <- setdiff(seq.int(dim(dat)[2]), c(nomatr,tgt))
-  
+
   nomData <- t(sapply(subset(dat, select = nomatr), as.integer))
   numData <- t(subset(dat, select = numatr))
-  
+
   # check if the measure can be applied to the data set features
-  
+
   if (length(numatr) & p == -2) {
     stop("Can not compute Overlap metric with numeric attributes!")
   }
@@ -76,7 +76,7 @@ nomatr <- c()
   tgtData <- dat[, tgt]
   n <- length(tgtData)
   res <- matrix(0.0, nrow = k, ncol = n)
-  if (class(tgtData) != "numeric") {tgtData <- as.integer(tgtData)}
+  if (!is(class(tgtData), "numeric")) {tgtData <- as.integer(tgtData)}
 
   Cl <- length(unique(tgtData))
   nnom <- length(nomatr)
@@ -92,8 +92,8 @@ nomatr <- c()
   storage.mode(tgtData) <- "double"
   storage.mode(distm) <- "double"
   storage.mode(numD) <- "double"
-  
-  neig <- .Fortran("F_neighbours", 
+
+  neig <- .Fortran("F_neighbours",
                    tgtData = tgtData,  # tgt data
                    numData = numData, #numeric data
                    nomData = nomData, #nominal data
